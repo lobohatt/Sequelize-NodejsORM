@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
+const sequelize = require('../db/connection');
  
 
 router.post('/user', (req, res) => {
@@ -81,6 +82,39 @@ router.delete('/userdel/:id',(req,res)=>{
     }).catch((error) => {
       res.send(`Error Deleting User - ${error}`);
     });
+});
+
+// Raw Query
+router.get('/user-raw',(req,res)=>{
+  
+  sequelize.query("SELECT * FROM tbl_users", {
+    type: sequelize.QueryTypes.SELECT
+  }).then((response)=>{
+    res.status(200).json({
+      status: 1,
+      message: 'Users Found',
+      data: response
+    })
+  }).catch((error)=>{
+    res.send(`Users Not found - ${error}`);
+  });
+
+});
+
+router.put('/userupdate-raw', (req, res) => {
+
+  sequelize.query("UPDATE tbl_users SET name ='"+req.body.name+"', email ='"+req.body.email+"' WHERE id = "+req.body.id+" ", {
+    type: sequelize.QueryTypes.UPDATE
+  }).then((response) => {
+    res.status(200).json({
+      status: 1,
+      message: 'User updated successfully',
+      data: response
+    })
+  }).catch((error) => {
+    res.send(`Users Not found - ${error}`);
+  });
+
 });
 
 
