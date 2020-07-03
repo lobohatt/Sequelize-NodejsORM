@@ -1,3 +1,5 @@
+const sequelize = require("../seqorm/src/db/connection");
+
 var User = sequelize.define("tbl_users", {
 
   id: {
@@ -34,6 +36,7 @@ var User = sequelize.define("tbl_users", {
   timestamps: false
 });
 
+sequelize.sync(); // for sync all models
 //  For more than one model
 // to sync a particular model
 // User.sync();
